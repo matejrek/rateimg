@@ -74,6 +74,16 @@
                 </div>
             </div>
         </nav>
+        <div class="container">
+        <hr/>
+            @guest
+
+            @else
+                <a href="/home">Vse objave</a>
+            @endguest
+        <hr/>
+        </div>
+
 
         <main class="py-4">
             @yield('content')

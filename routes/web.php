@@ -13,11 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', 'App\Http\Controllers\ObjavaController@public')->name('home');
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/createObjava', 'App\Http\Controllers\ObjavaController@create');
+    Route::post('/saveObjava', 'App\Http\Controllers\ObjavaController@store');
+    Route::get('/home', 'App\Http\Controllers\ObjavaController@index')->name('home');
+});
+
+
