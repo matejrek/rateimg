@@ -23,6 +23,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/createObjava', 'App\Http\Controllers\ObjavaController@create');
     Route::post('/saveObjava', 'App\Http\Controllers\ObjavaController@store');
     Route::get('/home', 'App\Http\Controllers\ObjavaController@index')->name('home');
+
+    Route::get('/editObjava/{id}', 'App\Http\Controllers\ObjavaController@edit');
+    Route::post('/saveEdit/{id}', 'App\Http\Controllers\ObjavaController@update');
+
+    Route::get('/deleteObjava/{id}', 'App\Http\Controllers\ObjavaController@destroy');
 });
 
 

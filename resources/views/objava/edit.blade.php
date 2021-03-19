@@ -5,7 +5,7 @@
 
 <div class="container">
 
-    <form method="POST" action="/saveObjava" class="form" enctype="multipart/form-data">
+    <form method="POST" action="/saveEdit/{{$objava->id}}" class="form" enctype="multipart/form-data">
         {{ csrf_field() }}
 
         @if(count($errors) >0)
@@ -17,21 +17,16 @@
                 </ul>
             </div>
         @endif
-        <label>Ime</label>
-        <br/>    
-        <input type="text" name="name">
-        <br/>
-        <br/>
         <label>Naložite sliko</label>
         <br/>
-        <input type="file" name="image" class="form-control" >
+        <input type="text" name="name" class="form-control" value="{{$objava->name}}">
 
         <br/>
         <br/>
 
         <select id="tipObjave" name="tipObjave">
-            <option value="0">Privat</option>
-            <option value="1">Public</option>
+            <option value="0" {{ $objava->type == 0 ? 'selected' : '' }}>Privat</option>
+            <option value="1" {{ $objava->type == 1 ? 'selected' : '' }}>Public</option>
         </select>
 
         <br/>

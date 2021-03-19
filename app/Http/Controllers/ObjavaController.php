@@ -23,8 +23,9 @@ class ObjavaController extends Controller
     }
 
     public function public(){
-        $publicObjave = Objava::where('type',1)->withCount('ratingsLike')->withCount('publicRatingsLike')->withCount('ratingsDislike')->withCount('publicRatingsDislike')->get();
 
+        $publicObjave = Objava::where('type',1)->withCount('ratingsLike')->withCount('publicRatingsLike')->withCount('ratingsDislike')->withCount('publicRatingsDislike')->get();
+ 
         return view('objava.public', compact('publicObjave'));
     }
     /**
@@ -53,6 +54,7 @@ class ObjavaController extends Controller
         $objava = new Objava();
         $objava->user_id = auth()->user()->id;
         $objava->type = $requestArr['tipObjave'];
+        $objava->name = $requestArr['name'];
 
         //save img
         $imageName = time().'.'.$request->image->extension();  
@@ -84,9 +86,10 @@ class ObjavaController extends Controller
      * @param  \App\Models\Objava  $objava
      * @return \Illuminate\Http\Response
      */
-    public function edit(Objava $objava)
+    public function edit($id)
     {
-        //
+        $objava = Objava::findOrFail($id);
+        return view('objava.edit', compact('objava'));
     }
 
     /**
@@ -96,9 +99,15 @@ class ObjavaController extends Controller
      * @param  \App\Models\Objava  $objava
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Objava $objava)
+    public function update(Request $request, $id)
     {
-        //
+        $objava = Objava::where('id', $id)->first();
+        if( auth()->user()->id == $objava->user_id){
+            $objava->name = $request->name;
+            $objava->type = $request->tipObjave;
+            $objava->save();
+        }
+        return redirect('/');
     }
 
     /**
@@ -107,9 +116,13 @@ class ObjavaController extends Controller
      * @param  \App\Models\Objava  $objava
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Objava $objava)
+    public function destroy(Objava $objava, $id)
     {
-        //
+        $objava = Objava::where('id', $id)->first();
+        if( auth()->user()->id == $objava->user_id){
+            $objava->delete();
+        }
+        return redirect('/');
     }
 
     public function like(Request $request, $id){

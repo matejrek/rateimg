@@ -8,6 +8,8 @@
     <div class="row">
         @foreach($publicObjave as $item)
             <div class="col-md-4">  
+                {{$item->name}}
+                <br/>
                 <img src="images/{{$item->imgPath}}" class="img-fluid"/>
                 <br/>
                 Likes:{{$item->ratings_like_count + $item->public_ratings_like_count}} , Dislikes: {{$item->ratings_dislike_count + $item->public_ratings_dislike_count}}

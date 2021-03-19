@@ -19,6 +19,7 @@ class CreateObjavasTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->boolean('type');
             $table->string('imgPath');
+            $table->text('name');
 
             $table->timestamps();
         });

@@ -13,7 +13,7 @@ class Objava extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'type', 'imgPath', 
+        'user_id', 'type', 'imgPath', 'name'
     ];
 
     public function user()
