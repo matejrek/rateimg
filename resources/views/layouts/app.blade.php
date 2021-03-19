@@ -79,7 +79,7 @@
             @guest
 
             @else
-                <a href="/home">Vse objave</a>
+                <a href="/home">Vse objave</a> | <a href="/">Samo javne objave</a>
             @endguest
         <hr/>
         </div>

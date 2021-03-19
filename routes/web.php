@@ -17,6 +17,8 @@ Route::get('/', 'App\Http\Controllers\ObjavaController@public')->name('home');
 
 Auth::routes(['verify' => true]);
 
+
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/createObjava', 'App\Http\Controllers\ObjavaController@create');
     Route::post('/saveObjava', 'App\Http\Controllers\ObjavaController@store');
@@ -24,3 +26,5 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
+Route::get('/like/{id}', 'App\Http\Controllers\ObjavaController@like');
+Route::get('/dislike/{id}', 'App\Http\Controllers\ObjavaController@dislike');

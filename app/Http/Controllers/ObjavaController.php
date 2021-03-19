@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Objava;
 use Illuminate\Http\Request;
+use App\Models\Rating;
+use App\Models\PublicRating;
 
 class ObjavaController extends Controller
 {
@@ -15,12 +17,13 @@ class ObjavaController extends Controller
     public function index()
     {
 
-        $objave = Objava::all();
+        $objave = Objava::withCount('ratingsLike')->withCount('publicRatingsLike')->withCount('ratingsDislike')->withCount('publicRatingsDislike')->get();
         return view('objava.index', compact('objave'));
+        //return $objave;
     }
 
     public function public(){
-        $publicObjave = Objava::all()->where('type',1);
+        $publicObjave = Objava::where('type',1)->withCount('ratingsLike')->withCount('publicRatingsLike')->withCount('ratingsDislike')->withCount('publicRatingsDislike')->get();
 
         return view('objava.public', compact('publicObjave'));
     }
@@ -109,6 +112,63 @@ class ObjavaController extends Controller
         //
     }
 
+    public function like(Request $request, $id){
+        if( auth()->user() ){
+            $exists = Rating::all()->where('user_id', auth()->user()->id)->where('objava_id',$id)->first();
+            if( $exists != null ){
+                $exists->delete();
+            } 
 
+            $rating = new Rating();
+            $rating->user_id = auth()->user()->id;
+            $rating->objava_id = $id;
+            $rating->type=1;
+            $rating->save();
+
+            
+        }
+        else{
+            $exists = PublicRating::all()->where('user_ip', $request->ip())->where('objava_id',$id)->first();
+            if( $exists != null  ){
+                $exists->delete();
+            } 
+
+            $publicRating = new PublicRating();
+            $publicRating->user_ip = $request->ip();
+            $publicRating->objava_id = $id;
+            $publicRating->type=1;
+            $publicRating->save();
+        }
+        return redirect('/');
+    }
+
+    public function dislike(Request $request, $id){
+        if( auth()->user() ){
+            $exists = Rating::all()->where('user_id', auth()->user()->id)->where('objava_id',$id)->first();
+            if( $exists != null  ){
+                $exists->delete();
+            } 
+
+            $rating = new Rating();
+            $rating->user_id = auth()->user()->id;
+            $rating->objava_id = $id;
+            $rating->type=0;
+            $rating->save();
+        }
+        else{
+            $exists = PublicRating::all()->where('user_ip', $request->ip())->where('objava_id',$id)->first();
+            if( $exists != null  ){
+                $exists->delete();
+            } 
+
+            $publicRating = new PublicRating();
+            $publicRating->user_ip = $request->ip();
+            $publicRating->objava_id = $id;
+            $publicRating->type=0;
+            $publicRating->save();
+
+        }
+        return redirect('/');
+    }
 
 }
